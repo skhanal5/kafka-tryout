@@ -34,9 +34,9 @@ func (p *ProducerClient) Shutdown() {
 	}
 }
 
-func NewProducer(port string, topic string) *ProducerClient {
+func NewProducer(broker string, topic string) *ProducerClient {
 	w := &kafka.Writer{
-		Addr:     kafka.TCP(port),
+		Addr:     kafka.TCP(broker),
 		Topic:   topic,
 		Balancer: &kafka.LeastBytes{},
 	}
