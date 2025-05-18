@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"log"
 	"os"
 	"os/signal"
 	"syscall"
@@ -14,7 +15,7 @@ import (
 
 func main() {
 	cfg := config.NewConfig()
-	c := producer.NewProducer(cfg.KafkaBroker, cfg.KafkaTopic)
+	p := producer.NewProducer(cfg.KafkaBroker, cfg.KafkaTopic)
 
     stop := make(chan os.Signal, 1)
     signal.Notify(stop, os.Interrupt, syscall.SIGTERM)
@@ -22,11 +23,12 @@ func main() {
     // Start message production loop
 	go func() {
 		for {
-			c.WriteMessage(context.Background(), time.Now().String())
+			p.WriteMessage(context.Background(), time.Now().String())
 		}
 	}()
 
     // Wait for shutdown signal
     <-stop
-    c.Shutdown()
+	log.Println("shutting down producer client...")
+    p.Shutdown()
 }
