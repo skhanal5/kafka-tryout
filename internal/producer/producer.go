@@ -7,10 +7,6 @@ import (
 	"github.com/segmentio/kafka-go"
 )
 
-type Producer interface {
-	
-}
-
 
 type ProducerClient struct {
 	writer *kafka.Writer
@@ -28,10 +24,9 @@ func (p *ProducerClient) WriteMessage(ctx context.Context, message string) {
 }
 
 func (p *ProducerClient) Shutdown() {
-	err := p.writer.Close()
-	if err != nil {
-		log.Fatal("failed to close client:", err)
-	}
+	if err := p.writer.Close(); err != nil {
+        log.Println("failed to close producer:", err)
+    }
 }
 
 func NewProducer(broker string, topic string) *ProducerClient {

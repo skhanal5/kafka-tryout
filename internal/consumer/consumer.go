@@ -23,13 +23,12 @@ func (c *ConsumerClient) ReadMessage(ctx context.Context) {
 }
 
 func (c *ConsumerClient) Shutdown() {
-	err := c.reader.Close()
-	if err != nil {
-		log.Fatal("failed to close reader client:", err)
-	}
+	if err := c.reader.Close(); err != nil {
+        log.Println("failed to close consumer:", err)
+    }
 }
 
-func NewProducer(broker string, topic string) *ConsumerClient {
+func NewConsumer(broker string, topic string) *ConsumerClient {
 	r := kafka.NewReader(kafka.ReaderConfig{
 		Brokers:    []string{broker},
 		Topic:   topic,
