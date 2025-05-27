@@ -1,6 +1,6 @@
 services:
   broker:
-    image: apache/kafka:latest
+    image: apache/kafka:4.0.0
     hostname: broker
     container_name: broker
     ports:
@@ -22,28 +22,35 @@ services:
       KAFKA_LOG_DIRS: /tmp/kraft-combined-logs
       CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
   kafka-exporter:
-    image: danielqsj/kafka-exporter:v1.9.0
+    container_name: kafka-exporter
+    image: danielqsj/kafka-exporter:v1.8.0
     command: ["--kafka.server=kafka:9092"]
+    depends_on:
+      - kafka
     ports:
       - 9308:9308     
   jmx-exporter:
+    container_name: jmx-exporter
     image: sscaling/jmx-prometheus-exporter:0.12.0
+    depends_on:
+      - kafka
     ports:
       - 5556:5556  
   prometheus:
+    container_name: prometheus
     image: prom/prometheus:v3.4.0
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - kafka
     ports:
       - 9090:9090
-    networks:
-      - monitoring
   grafana:
+    container_name: grafana
     image: grafana/grafana:12.0.1
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=password
+    depends_on:
+      - prometheus
     ports:
       - 3000:3000
-    networks:
-      - monitoring
-  
