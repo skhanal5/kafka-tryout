@@ -59,7 +59,5 @@ services:
     image: amir20/dozzle:latest
     ports:
       - 8080:8080
-    networks:
-      - dozzle
     deploy:
       mode: global
