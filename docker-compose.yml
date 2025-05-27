@@ -21,3 +21,29 @@ services:
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
       KAFKA_LOG_DIRS: /tmp/kraft-combined-logs
       CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+  kafka-exporter:
+    image: danielqsj/kafka-exporter:v1.9.0
+    command: ["--kafka.server=kafka:9092"]
+    ports:
+      - 9308:9308     
+  jmx-exporter:
+    image: sscaling/jmx-prometheus-exporter:0.12.0
+    ports:
+      - 5556:5556  
+  prometheus:
+    image: prom/prometheus:v3.4.0
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - 9090:9090
+    networks:
+      - monitoring
+  grafana:
+    image: grafana/grafana:12.0.1
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=password
+    ports:
+      - 3000:3000
+    networks:
+      - monitoring
+  
