@@ -54,3 +54,12 @@ services:
       - prometheus
     ports:
       - 3000:3000
+  dozzle:
+    container_name: dozzle:v8
+    image: amir20/dozzle:latest
+    ports:
+      - 8080:8080
+    networks:
+      - dozzle
+    deploy:
+      mode: global
