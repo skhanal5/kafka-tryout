@@ -3,9 +3,9 @@ global:
     evaluation_interval: 15s
 rule_files:
 scrape_configs:
-- job_name: 'jmx'
-  static_configs:
-  - targets: ['jmx-exporter:5556']
 - job_name: 'kafka-exporter'
   static_configs:
-  - targets: ['kafka-exporter:5556']
+  - targets: ['kafka-exporter:9308']
+- job_name: 'kafka-jmx'
+  static_configs:
+  - targets: ['broker:9998']
