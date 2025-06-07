@@ -15,14 +15,14 @@ func main() {
 	cfg := config.NewConfig()
 	c := consumer.NewConsumer(cfg.KafkaBroker, cfg.KafkaTopic)
 
-    stop := make(chan os.Signal, 1)
-    signal.Notify(stop, os.Interrupt, syscall.SIGTERM)
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, os.Interrupt, syscall.SIGTERM)
 
-    // Start message production loop
-    go c.ReadMessage(context.Background())
+	// Start message production loop
+	go c.ReadMessage(context.Background())
 
-    // Wait for shutdown signal
-    <-stop
-    log.Println("shutting down consumer client...")
-    c.Shutdown()
+	// Wait for shutdown signal
+	<-stop
+	log.Println("shutting down consumer client...")
+	c.Shutdown()
 }

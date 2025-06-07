@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -12,23 +13,23 @@ import (
 	"github.com/skhanal5/kafka-tryout/internal/producer"
 )
 
-
 func main() {
 	cfg := config.NewConfig()
+	fmt.Println("Connecting to Kafka broker:", cfg.KafkaBroker)
 	p := producer.NewProducer(cfg.KafkaBroker, cfg.KafkaTopic)
 
-    stop := make(chan os.Signal, 1)
-    signal.Notify(stop, os.Interrupt, syscall.SIGTERM)
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, os.Interrupt, syscall.SIGTERM)
 
-    // Start message production loop
+	// Start message production loop
 	go func() {
 		for {
 			p.WriteMessage(context.Background(), time.Now().String())
 		}
 	}()
 
-    // Wait for shutdown signal
-    <-stop
+	// Wait for shutdown signal
+	<-stop
 	log.Println("shutting down producer client...")
-    p.Shutdown()
+	p.Shutdown()
 }
