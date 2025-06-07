@@ -30,10 +30,10 @@ func (c *ConsumerClient) Shutdown() {
 
 func NewConsumer(broker string, topic string) *ConsumerClient {
 	r := kafka.NewReader(kafka.ReaderConfig{
-		Brokers:   []string{broker},
-		Topic:     topic,
-		Partition: 0,
-		MaxBytes:  10e6,
+		Brokers:  []string{broker},
+		Topic:    topic,
+		GroupID:  "my-consumer-group",
+		MaxBytes: 10e6,
 	})
 	return &ConsumerClient{
 		reader: r,
